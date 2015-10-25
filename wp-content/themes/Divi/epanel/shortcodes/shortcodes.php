@@ -268,7 +268,9 @@ function et_feedburner($atts, $content = null){
 
 add_shortcode('retweet','et_retweet');
 function et_retweet($atts, $content = null){
-	$output = "<a href='http://twitter.com/share' class='twitter-share-button' data-count='vertical'>Tweet</a><script type='text/javascript' src='http://platform.twitter.com/widgets.js'></script>";
+	global $themename;
+
+	$output = "<a href='http://twitter.com/share' class='twitter-share-button' data-count='vertical'>" . esc_html__( 'Tweet', $themename ) . "</a><script type='text/javascript' src='http://platform.twitter.com/widgets.js'></script>";
 	return $output;
 }
 
@@ -501,6 +503,8 @@ function et_tabcontainer($atts, $content = null) {
 
 add_shortcode('imagetabcontainer', 'et_imagetabcontainer');
 function et_imagetabcontainer($atts, $content = null) {
+	global $themename;
+
 	extract(shortcode_atts(array(
 		"id" => '',
 		"class" => ''
@@ -511,12 +515,15 @@ function et_imagetabcontainer($atts, $content = null) {
 	$id = ($id <> '') ? " id='" . esc_attr( $id ) . "'" : '';
 	$class = ($class <> '') ? esc_attr( ' ' . $class ) : '';
 
+	$previous = esc_html__( 'Previous', $themename );
+	$next     = esc_html__( 'Next', $themename );
+
 	$output = "
 		<div{$id} class='controllers-wrapper{$class}'>
 			<div class='controllers'>
-				<a class='left-arrow' href='#'>Previous</a>
+				<a class='left-arrow' href='#'>{$previous}</a>
 				{$content}
-				<a class='right-arrow' href='#'>Next</a>
+				<a class='right-arrow' href='#'>{$next}</a>
 			</div> <!-- end #controllers -->
 			<div class='controllers-right'></div>
 		</div><!-- end #controllers-wrapper -->";
@@ -714,13 +721,15 @@ function et_custom_list($atts, $content = null) {
 
 add_shortcode('pricing', 'et_pricing');
 function et_pricing($atts, $content = null) {
+	global $themename;
+
 	extract(shortcode_atts(array(
 		"price" => '19.95',
 		"title" => "professional",
 		"desc" => "",
 		"url" => "#",
 		"window" => "",
-		"moretext" => 'Join Now',
+		"moretext" => __( 'Join Now', $themename ),
 		"type" => "small",
 		"currency" => "$"
 	), $atts, 'pricing'));
@@ -891,7 +900,7 @@ function et_columns($atts, $content = null, $name='') {
 	$pos = strpos($name,'_last');
 
 	if($pos !== false)
-		$name = str_replace('_last',' last',$name);
+		$name = str_replace('_last',' et_column_last',$name);
 
 	$output = "<div{$id} class='" . esc_attr( $name . $class ) . "'>
 					{$content}
@@ -953,7 +962,15 @@ function et_advanced_buttons(){
 		var defaultSettings = {},
 			outputOptions = '',
 			selected ='',
-			content = '';
+			content = '',
+			et_quicktags_strings = {
+				learn_more : "<?php esc_html_e( 'Add ET Learn more block', $themename ); ?>",
+				box        : "<?php esc_html_e( 'Add ET Box', $themename ); ?>",
+				button     : "<?php esc_html_e( 'Add ET Button', $themename ); ?>",
+				tabs       : "<?php esc_html_e( 'Add ET Tabs', $themename ); ?>",
+				author     : "<?php esc_html_e( 'Add Author Bio', $themename ); ?>",
+				shortcodes : "<?php esc_html_e( 'Shortcodes', $themename ); ?>",
+			};
 
 		defaultSettings['learn_more'] = {
 			caption: {

@@ -37,7 +37,7 @@
 #panel-wrap { float: left; position: relative; width: 737px; }
 #epanel-wrapper { background: url(../images/epanel-bg.png) repeat-y; width: 737px; min-height: 528px; float: left; }
 	#epanel { background: url(../images/panel-top-bg.png) top left no-repeat; width: 737px; font-family: Arial, sans-serif; float: left; padding-bottom: 5px; }
-		#epanel a { text-decoration: none; }
+		#epanel a { text-decoration: none; box-shadow: none; }
 
 		#epanel-sidebar { width: 180px; float: left; }
 			#epanel-logo { position: absolute; top: -38px; left: -180px;}
@@ -212,3 +212,5 @@ div#epanel-ajax-saving { position: fixed; top: 35%; left: 44%; padding: 20px 40p
 
 #epanel-content .epanel-box .upload_image_reset { margin-right: 7px; background:url("../images/top-input-bg.png") repeat-x scroll 0 0 #FFFFFF; border:1px solid #D5D5D5; padding:3px 7px 3px 8px; width:33px; color: #666666; }
 	#epanel-content .epanel-box .upload_image_reset:hover { color: #111111; }
+
+#epanel-content .epanel-box .upload_image_button { padding: 6px 4px; }

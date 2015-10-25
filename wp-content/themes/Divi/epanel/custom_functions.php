@@ -1,10 +1,6 @@
 <?php
-if ( ! function_exists( 'get_custom_header' ) ) {
-	// compatibility with versions of WordPress prior to 3.4.
-	add_custom_background();
-} else {
-	add_theme_support( 'custom-background', apply_filters( 'et_custom_background_args', array() ) );
-}
+
+add_theme_support( 'custom-background', apply_filters( 'et_custom_background_args', array() ) );
 
 if (function_exists('add_post_type_support')) add_post_type_support( 'page', 'excerpt' );
 add_theme_support( 'automatic-feed-links' );
@@ -45,7 +41,7 @@ if ( ! function_exists( 'et_options_stored_in_one_row' ) ){
  * @return mixed Theme option value or false if not found.
  */
 if ( ! function_exists( 'et_get_option' ) ){
-	function et_get_option( $option_name, $default_value = '', $used_for_object = '' ){
+	function et_get_option( $option_name, $default_value = '', $used_for_object = '', $force_default_value = false ){
 		global $et_theme_options, $shortname;
 
 		if ( et_options_stored_in_one_row() ){
@@ -57,7 +53,10 @@ if ( ! function_exists( 'et_get_option' ) ){
 			$option_value = get_option( $option_name );
 		}
 
-		if ( ! $option_value && '' != $default_value ) $option_value = $default_value;
+		// option value might be equal to false, so check if the option is not set in the database
+		if ( ! isset( $et_theme_options[ $option_name ] ) && ( '' != $default_value || $force_default_value ) ) {
+			$option_value = $default_value;
+		}
 
 		if ( '' != $used_for_object && in_array( $used_for_object, array( 'page', 'category' ) ) && is_array( $option_value ) )
 			$option_value = et_generate_wpml_ids( $option_value, $used_for_object );
@@ -118,16 +117,6 @@ function et_browser_body_class($classes) {
 	return $classes;
 }
 
-// Tells wp_trim_words() function to use characters instead of words
-function et_wp_trim_words_to_characters( $default_translated_text, $original_text, $context ) {
-	if ( ! is_admin() && 'words' == $original_text && 'word count: words or characters?' == $context ) {
-		return 'characters';
-	}
-
-    return $default_translated_text;
-}
-add_filter( 'gettext_with_context', 'et_wp_trim_words_to_characters', 20, 3 );
-
 /*this function allows for the auto-creation of post excerpts*/
 if ( ! function_exists( 'truncate_post' ) ){
 	function truncate_post( $amount, $echo = true, $post = '' ) {
@@ -160,11 +149,7 @@ if ( ! function_exists( 'truncate_post' ) ){
 			}
 
 			// trim text to a certain number of characters, also remove spaces from the end of a string ( space counts as a character )
-			if ( ! $echo ) {
-				$truncate = rtrim( et_wp_trim_words( $truncate, $amount, '' ) );
-			} else {
-				$truncate = rtrim( wp_trim_words( $truncate, $amount, '' ) );
-			}
+			$truncate = rtrim( et_wp_trim_words( $truncate, $amount, '' ) );
 
 			// remove the last word to make sure we display all words correctly
 			if ( '' != $echo_out ) {
@@ -203,7 +188,7 @@ if ( ! function_exists( 'et_wp_trim_words' ) ){
 			$text = implode( $sep, $words_array );
 		}
 
-		return apply_filters( 'wp_trim_words', $text, $num_words, $more, $original_text );
+		return $text;
 	}
 }
 
@@ -216,7 +201,7 @@ if ( ! function_exists( 'truncate_title' ) ){
 		if ( strlen( $truncate ) <= $amount ) $echo_out = '';
 		else $echo_out = '...';
 
-		$truncate = wp_trim_words( $truncate, $amount, '' );
+		$truncate = et_wp_trim_words( $truncate, $amount, '' );
 
 		if ( '' != $echo_out ) $truncate .= $echo_out;
 
@@ -508,14 +493,8 @@ function head_addons(){
 	<?php };
 
 	//prints the theme name, version in meta tag
-	if ( ! function_exists( 'get_custom_header' ) ){
-		// compatibility with versions of WordPress prior to 3.4.
-		$theme_info = get_theme_data(TEMPLATEPATH . '/style.css');
-		echo '<meta content="' . esc_attr( $theme_info['Name'] . ' v.' . $theme_info['Version'] ) . '" name="generator"/>';
-	} else {
-		$theme_info = wp_get_theme();
-		echo '<meta content="' . esc_attr( $theme_info->display('Name') . ' v.' . $theme_info->display('Version') ) . '" name="generator"/>';
-	}
+	$theme_info = wp_get_theme();
+	echo '<meta content="' . esc_attr( $theme_info->display('Name') . ' v.' . $theme_info->display('Version') ) . '" name="generator"/>';
 
 	if ( et_get_option( $shortname . '_custom_colors' ) == 'on' ) et_epanel_custom_colors_css();
 
@@ -628,9 +607,16 @@ if ( ! function_exists( 'elegant_is_blog_posts_page' ) ){
 	}
 }
 
-/*this function controls the meta titles display*/
+// Added for backwards compatibility
 if ( ! function_exists( 'elegant_titles' ) ){
 	function elegant_titles() {
+		wp_title();
+	}
+}
+
+/*this function controls the meta titles display*/
+if ( ! function_exists( 'elegant_titles_filter' ) ){
+	function elegant_titles_filter( $custom_title, $sep ) {
 		global $shortname, $themename;
 
 		$custom_title = '';
@@ -720,10 +706,10 @@ if ( ! function_exists( 'elegant_titles' ) ){
 			}
 		}
 
-		// Improves compatibility with SEO plugins
-		echo apply_filters( 'wp_title', wp_strip_all_tags( $custom_title ) );
+		return wp_strip_all_tags( $custom_title );
 	}
 }
+add_filter( 'wp_title', 'elegant_titles_filter', 10, 2 );
 
 /*this function controls the meta description display*/
 if ( ! function_exists( 'elegant_description' ) ){
@@ -1030,28 +1016,23 @@ if ( ! function_exists( 'et_resize_image' ) ){
 			}
 
 			#we didn't find the image in cache, resizing is done here
-			if ( ! function_exists( 'wp_get_image_editor' ) ) {
-				// compatibility with versions of WordPress prior to 3.5.
-				$result = image_resize( $localfile, $new_width, $new_height, $crop, $suffix, $destination_dir );
+			$et_image_editor = wp_get_image_editor( $localfile );
+
+			if ( ! is_wp_error( $et_image_editor ) ) {
+				$et_image_editor->resize( $new_width, $new_height, $crop );
+
+				// generate correct file name/path
+				$et_new_image_name = $et_image_editor->generate_filename( $suffix, $destination_dir );
+
+				do_action( 'et_resize_image_before_save', $et_image_editor, $et_new_image_name );
+
+				$et_image_editor->save( $et_new_image_name );
+
+				// assign new image path
+				$result = $et_new_image_name;
 			} else {
-				$et_image_editor = wp_get_image_editor( $localfile );
-
-				if ( ! is_wp_error( $et_image_editor ) ) {
-					$et_image_editor->resize( $new_width, $new_height, $crop );
-
-					// generate correct file name/path
-					$et_new_image_name = $et_image_editor->generate_filename( $suffix, $destination_dir );
-
-					do_action( 'et_resize_image_before_save', $et_image_editor, $et_new_image_name );
-
-					$et_image_editor->save( $et_new_image_name );
-
-					// assign new image path
-					$result = $et_new_image_name;
-				} else {
-					// assign a WP_ERROR ( WP_Image_Editor instance wasn't created properly )
-					$result = $et_image_editor;
-				}
+				// assign a WP_ERROR ( WP_Image_Editor instance wasn't created properly )
+				$result = $et_image_editor;
 			}
 
 			if ( ! is_wp_error( $result ) ) {
@@ -1078,9 +1059,13 @@ add_action( 'pre_get_posts', 'et_custom_posts_per_page' );
 function et_custom_posts_per_page( $query = false ) {
 	global $shortname;
 
-	if ( is_admin() ) return;
+	if ( is_admin() ) {
+		return;
+	}
 
-	if ( ! is_a( $query, 'WP_Query' ) || ! $query->is_main_query() ) return;
+	if ( ! is_a( $query, 'WP_Query' ) || ! $query->is_main_query() ) {
+		return;
+	}
 
 	if ( $query->is_category ) {
 		$query->set( 'posts_per_page', (int) et_get_option( $shortname . '_catnum_posts', '10' ) );
@@ -1107,7 +1092,13 @@ function et_custom_posts_per_page( $query = false ) {
 		}
 		$query->set( 'posts_per_page', (int) et_get_option( $shortname . '_searchnum_posts', '10' ) );
 	} elseif ( $query->is_archive ) {
-		$query->set( 'posts_per_page', (int) et_get_option( $shortname . '_archivenum_posts', '10' ) );
+		$posts_number = (int) et_get_option( $shortname . '_archivenum_posts', '10' );
+
+		if ( function_exists( 'is_woocommerce' ) && is_woocommerce() ) {
+			$posts_number = (int) et_get_option( $shortname . '_woocommerce_archive_num_posts', '9' );
+		}
+
+		$query->set( 'posts_per_page', $posts_number );
 	}
 }
 
@@ -1770,7 +1761,7 @@ function et_gf_enqueue_fonts( $et_gf_font_names ) {
 		);
 
 		$et_gf_font_name_slug = strtolower( str_replace( ' ', '-', $et_gf_font_name ) );
-		wp_enqueue_style( 'et-gf-' . $et_gf_font_name_slug, add_query_arg( $query_args, "$protocol://fonts.googleapis.com/css" ), array(), null );
+		wp_enqueue_style( 'et-gf-' . $et_gf_font_name_slug, esc_url( add_query_arg( $query_args, "$protocol://fonts.googleapis.com/css" ) ), array(), null );
 	}
 }
 endif;

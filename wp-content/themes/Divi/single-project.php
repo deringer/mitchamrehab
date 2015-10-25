@@ -2,7 +2,9 @@
 
 get_header();
 
-$is_page_builder_used = et_pb_is_pagebuilder_used( get_the_ID() ); ?>
+$is_page_builder_used = et_pb_is_pagebuilder_used( get_the_ID() );
+
+?>
 
 <div id="main-content">
 
@@ -21,7 +23,7 @@ $is_page_builder_used = et_pb_is_pagebuilder_used( get_the_ID() ); ?>
 				<?php if ( ! $is_page_builder_used ) : ?>
 
 					<div class="et_main_title">
-						<h1><?php the_title(); ?></h1>
+						<h1 class="entry-title"><?php the_title(); ?></h1>
 						<span class="et_project_categories"><?php echo get_the_term_list( get_the_ID(), 'project_category', '', ', ' ); ?></span>
 					</div>
 

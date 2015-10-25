@@ -45,6 +45,7 @@ $options = array (
 			array( "name" => esc_html__("Logo",$themename),
 				   "id" => $shortname."_logo",
 				   "type" => "upload",
+				   "button_text" => __( "Set As Logo", $themename ),
 				   "std" => "",
 				   "desc" => esc_html__("If you would like to use your own custom logo image click the Upload Image button.",$themename)
 			),
@@ -52,6 +53,7 @@ $options = array (
 			array( "name" => esc_html__("Favicon",$themename),
 				   "id" => $shortname."_favicon",
 				   "type" => "upload",
+				   "button_text" => __( "Set As Favicon", $themename ),
 				   "std" => "",
 				   "desc" => esc_html__("If you would like to use your own custom favicon image click the Upload Image button.",$themename)
 			),
@@ -81,7 +83,7 @@ $options = array (
 
 			array( "type" => "clearfix",),
 
-			array( 	"name" => esc_html__( "Shop Page Layout", $themename ),
+			array( 	"name" => esc_html__( "Shop Page & Category Page Layout for WooCommerce", $themename ),
 				   	"id" => $shortname . "_shop_page_sidebar",
 				   	"type" => "select",
 				   	"options" => array(
@@ -90,7 +92,7 @@ $options = array (
 				   		'et_full_width_page' => __( 'Full Width', $themename ),
 				   	),
 				   	"std" => 'et_right_sidebar',
-				   	"desc" => esc_html__( "Here you can choose Shop page layout.", $themename ),
+				   	"desc" => esc_html__( "Here you can choose Shop Page & Category Page Layout for WooCommerce.", $themename ),
 				   	'et_save_values' => true,
 			),
 
@@ -102,69 +104,89 @@ $options = array (
 				   "desc" => sprintf( __( 'Enter your MailChimp API key. You can create an api key <a target="_blank" href="%1$s">here</a>', $themename ), 'https://us3.admin.mailchimp.com/account/api/' ),
 			),
 
-			array( "name" => "Regenerate MailChimp Lists",
+			array( "name" => __( "Aweber Authorization", $themename ),
+                   "type" => "callback_function",
+				   "desc" => __( 'Authorize your Aweber account here.', $themename ),
+				   "function_name" => 'et_aweber_authorization_option',
+			),
+
+			array( "name" => __( "Regenerate MailChimp Lists", $themename ),
                    "id" => $shortname."_regenerate_mailchimp_lists",
                    "type" => "checkbox",
                    "std" => "false",
-                   "desc" => "By default, MailChimp lists are cached for one day. If you added new list, but it doesn't appear within the SignUp module settings, activate this option. Don't forget to disable it once the list has been regenerated."),
+                   "desc" => __( "By default, MailChimp lists are cached for one day. If you added new list, but it doesn't appear within the Email Optin module settings, activate this option. Don't forget to disable it once the list has been regenerated.",$themename ) ),
+
+			array( "name" => __( "Regenerate Aweber Lists", $themename ),
+                   "id" => $shortname."_regenerate_aweber_lists",
+                   "type" => "checkbox2",
+                   "std" => "false",
+                   "desc" => __( "By default, Aweber lists are cached for one day. If you added new list, but it doesn't appear within the Email Optin module settings, activate this option. Don't forget to disable it once the list has been regenerated.", $themename ) ),
 
 			array( "type" => "clearfix",),
 
-			array( "name" => "Show Facebook Icon",
+			array( "name" => __( "Show Facebook Icon", $themename ),
                    "id" => $shortname."_show_facebook_icon",
                    "type" => "checkbox",
                    "std" => "on",
-                   "desc" => "Here you can choose to display the Facebook Icon on your homepage. "),
+                   "desc" => __( "Here you can choose to display the Facebook Icon on your homepage. ", $themename ) ),
 
-			array( "name" => "Show Twitter Icon",
+			array( "name" => __( "Show Twitter Icon", $themename ),
                    "id" => $shortname."_show_twitter_icon",
                    "type" => "checkbox2",
                    "std" => "on",
-                   "desc" => "Here you can choose to display the Twitter Icon. "),
+                   "desc" => __( "Here you can choose to display the Twitter Icon. ", $themename ) ),
 
 			array( "type" => "clearfix",),
 
-			array( "name" => "Show Google+ Icon",
+			array( "name" => __( "Show Google+ Icon", $themename ),
                    "id" => $shortname."_show_google_icon",
                    "type" => "checkbox",
                    "std" => "on",
-                   "desc" => "Here you can choose to display the Google+ Icon on your homepage. "),
+                   "desc" => __( "Here you can choose to display the Google+ Icon on your homepage. ", $themename ) ),
 
-			array( "name" => "Show RSS Icon",
+			array( "name" => __( "Show RSS Icon", $themename ),
                    "id" => $shortname."_show_rss_icon",
                    "type" => "checkbox2",
                    "std" => "on",
-                   "desc" => "Here you can choose to display the RSS Icon. "),
+                   "desc" => __( "Here you can choose to display the RSS Icon. ", $themename ) ),
 
 			array( "type" => "clearfix",),
 
-			array( "name" => "Facebook Profile Url",
+			array( "name" => __( "Facebook Profile Url", $themename ),
                    "id" => $shortname."_facebook_url",
                    "std" => "#",
                    "type" => "text",
                    "validation_type" => "url",
-				   "desc" => "Enter the URL of your Facebook Profile. "),
+				   "desc" => __( "Enter the URL of your Facebook Profile. ", $themename ) ),
 
-			array( "name" => "Twitter Profile Url",
+			array( "name" => __( "Twitter Profile Url", $themename ),
                    "id" => $shortname."_twitter_url",
                    "std" => "#",
                    "type" => "text",
                    "validation_type" => "url",
-				   "desc" => "Enter the URL of your Twitter Profile."),
+				   "desc" => __( "Enter the URL of your Twitter Profile.", $themename ) ),
 
-			array( "name" => "Google+ Profile Url",
+			array( "name" => __( "Google+ Profile Url", $themename ),
                    "id" => $shortname."_google_url",
                    "std" => "#",
                    "type" => "text",
                    "validation_type" => "url",
-				   "desc" => "Enter the URL of your Google+ Profile. "),
+				   "desc" => __( "Enter the URL of your Google+ Profile. ", $themename ) ),
 
-			array( "name" => "RSS Icon Url",
+			array( "name" => __( "RSS Icon Url", $themename ),
                    "id" => $shortname."_rss_url",
                    "std" => "",
                    "type" => "text",
                    "validation_type" => "url",
-				   "desc" => "Enter the URL of your RSS feed. "),
+				   "desc" => __( "Enter the URL of your RSS feed. ", $themename ) ),
+
+			array( "name" => esc_html__( "Number of Products displayed on WooCommerce archive pages", $themename ),
+				   "id" => $shortname . "_woocommerce_archive_num_posts",
+				   "std" => "9",
+				   "type" => "text",
+				   "desc" => esc_html__( "Here you can designate how many WooCommerce products are displayed on the archive page. This option works independently from the Settings > Reading options in wp-admin.", $themename),
+				   "validation_type" => "number"
+			),
 
 			array( "name" => esc_html__("Number of Posts displayed on Category page",$themename),
 				   "id" => $shortname."_catnum_posts",
@@ -203,7 +225,7 @@ $options = array (
 				   "std" => "M j, Y",
 				   "type" => "text",
 				   "desc" => __("This option allows you to change how your dates are displayed. For more information please refer to the WordPress codex here:<a href='http://codex.wordpress.org/Formatting_Date_and_Time' target='_blank'>Formatting Date and Time</a>",$themename),
-				   "validation_type" => "nohtml"
+				   "validation_type" => "date_format"
 			),
 
 			array( "type" => "clearfix",),
@@ -229,6 +251,29 @@ $options = array (
 				   "type" => "checkbox",
 				   "std" => "false",
 				   "desc" => esc_html__("This will enable Google Fonts for Non-English languages.",$themename)
+			),
+
+			array( "name" => esc_html__("Back To Top Button",$themename),
+				   "id" => $shortname."_back_to_top",
+				   "type" => "checkbox2",
+				   "std" => "false",
+				   "desc" => esc_html__("Enable this option to display Back To Top Button while scrolling",$themename)
+			),
+
+			array( "type" => "clearfix",),
+
+			array( "name" => esc_html__( "Smooth Scrolling", $themename ),
+				   "id" => $shortname . "_smooth_scroll",
+				   "type" => "checkbox",
+				   "std" => "false",
+				   "desc" => esc_html__( "Enable this option to get the smooth scrolling effect with mouse wheel", $themename )
+			),
+
+			array( "name" => esc_html__( "Disable Translations", $themename ),
+				   "id" => $shortname . "_disable_translations",
+				   "type" => "checkbox2",
+				   "std" => "false",
+				   "desc" => esc_html__( "Disable translations, if you don't want to display translated theme strings on your site.", $themename )
 			),
 
 			array( "type" => "clearfix",),
@@ -459,7 +504,7 @@ $options = array (
 				   "id" => $shortname."_page_thumbnails",
 				   "type" => "checkbox",
 				   "std" => "false",
-				   "desc" => esc_html__("By default thumbnails are not placed on pages (they are only used on posts). However, if you want to use thumbnails on posts you can! Just enable this option. ",$themename)
+				   "desc" => esc_html__("By default thumbnails are not placed on pages (they are only used on posts). However, if you want to use thumbnails on pages you can! Just enable this option. ",$themename)
 			),
 
 			array( "name" => esc_html__("Show comments on pages",$themename),
@@ -552,7 +597,7 @@ $options = array (
 				   "id" => $shortname."_seo_home_canonical",
 				   "type" => "checkbox",
 				   "std" => "false",
-				   "desc" => esc_html__("Canonicalization helps to prevent the indexing of duplicate content by search engines, and as a result, may help avoid duplicate content penalties and pagerank degradation. Some pages may have different URLs all leading to the same place. For example domain.com, domain.com/index.html, and www.domain.com are all different URLs leading to your homepage. From a search engine's perspective these duplicate URLs, which also occur often due to custom permalinks, may be treaded individually instead of as a single destination. Defining a canonical URL tells the search engine which URL you would like to use officially. The theme bases its canonical URLs off your permalinks and the domain name defined in the settings tab of wp-admin.",$themename)
+				   "desc" => esc_html__("Canonicalization helps to prevent the indexing of duplicate content by search engines, and as a result, may help avoid duplicate content penalties and pagerank degradation. Some pages may have different URLs all leading to the same place. For example domain.com, domain.com/index.html, and www.domain.com are all different URLs leading to your homepage. From a search engine's perspective these duplicate URLs, which also occur often due to custom permalinks, may be treated individually instead of as a single destination. Defining a canonical URL tells the search engine which URL you would like to use officially. The theme bases its canonical URLs off your permalinks and the domain name defined in the settings tab of wp-admin.",$themename)
 			),
 
 			array( "type" => "clearfix",),
@@ -630,7 +675,7 @@ $options = array (
 				   "id" => $shortname."_seo_single_canonical",
 				   "type" => "checkbox2",
 				   "std" => "false",
-				   "desc" => esc_html__("Canonicalization helps to prevent the indexing of duplicate content by search engines, and as a result, may help avoid duplicate content penalties and pagerank degradation. Some pages may have different URL's all leading to the same place. For example domain.com, domain.com/index.html, and www.domain.com are all different URLs leading to your homepage. From a search engine's perspective these duplicate URLs, which also occur often due to custom permalinks, may be treaded individually instead of as a single destination. Defining a canonical URL tells the search engine which URL you would like to use officially. The theme bases its canonical URLs off your permalinks and the domain name defined in the settings tab of wp-admin.",$themename)
+				   "desc" => esc_html__("Canonicalization helps to prevent the indexing of duplicate content by search engines, and as a result, may help avoid duplicate content penalties and pagerank degradation. Some pages may have different URLs all leading to the same place. For example domain.com, domain.com/index.html, and www.domain.com are all different URLs leading to your homepage. From a search engine's perspective these duplicate URLs, which also occur often due to custom permalinks, may be treated individually instead of as a single destination. Defining a canonical URL tells the search engine which URL you would like to use officially. The theme bases its canonical URLs off your permalinks and the domain name defined in the settings tab of wp-admin.",$themename)
 			),
 
 			array( "type" => "clearfix",),
@@ -685,7 +730,7 @@ $options = array (
 				   "id" => $shortname."_seo_index_canonical",
 				   "type" => "checkbox",
 				   "std" => "false",
-				   "desc" => esc_html__("Canonicalization helps to prevent the indexing of duplicate content by search engines, and as a result, may help avoid duplicate content penalties and pagerank degradation. Some pages may have different URL's all leading to the same place. For example domain.com, domain.com/index.html, and www.domain.com are all different URLs leading to your homepage. From a search engine's perspective these duplicate URLs, which also occur often due to custom permalinks, may be treaded individually instead of as a single destination. Defining a canonical URL tells the search engine which URL you would like to use officially. The theme bases its canonical URLs off your permalinks and the domain name defined in the settings tab of wp-admin.",$themename)
+				   "desc" => esc_html__("Canonicalization helps to prevent the indexing of duplicate content by search engines, and as a result, may help avoid duplicate content penalties and pagerank degradation. Some pages may have different URLs all leading to the same place. For example domain.com, domain.com/index.html, and www.domain.com are all different URLs leading to your homepage. From a search engine's perspective these duplicate URLs, which also occur often due to custom permalinks, may be treated individually instead of as a single destination. Defining a canonical URL tells the search engine which URL you would like to use officially. The theme bases its canonical URLs off your permalinks and the domain name defined in the settings tab of wp-admin.",$themename)
 			),
 
 			array( "name" => esc_html__("Enable meta descriptions",$themename),
