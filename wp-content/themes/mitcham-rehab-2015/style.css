@@ -35,7 +35,7 @@ strong {
 
 #main-header {
     box-shadow: none;
-    border-bottom: 1px solid rgb(22, 190, 207);
+    border-bottom: 5px solid rgb(22, 190, 207);
     padding-bottom: 30px;
     padding-top: 25px;
 }
@@ -162,6 +162,16 @@ strong {
 /** End home page */
 
 /** Page headings */
+.et_pb_fullwidth_header {
+    margin-bottom: 30px;
+}
+
+h1 {
+    font-family: 'canada-type-gibson', Helvetica, Arial, sans-serif !important;
+    font-size: 26pt;
+    font-weight: 500;
+}
+
 .page-header {
     margin-bottom: 0;
     padding-bottom: 0;
@@ -183,7 +193,7 @@ strong {
 
 .page-heading-container {
     padding-bottom: 20px;
-    padding-top: 20px;
+    padding-top: 0;
 }
 /** End page headings */
 
