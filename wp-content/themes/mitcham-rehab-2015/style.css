@@ -166,6 +166,11 @@ strong {
     margin-bottom: 30px;
 }
 
+.et_pb_fullwidth_header .et_pb_fullwidth_header_container.left .header-content {
+    margin-left: 0;
+    padding-left: 0;
+}
+
 h1 {
     font-family: 'canada-type-gibson', Helvetica, Arial, sans-serif !important;
     font-size: 26pt;
