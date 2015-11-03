@@ -197,8 +197,7 @@ h1 {
 }
 
 .page-heading-container {
-    padding-bottom: 20px;
-    padding-top: 0;
+    padding: 5px 0 !important;
 }
 /** End page headings */
 
