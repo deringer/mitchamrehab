@@ -118,6 +118,18 @@ strong {
 /** End site footer */
 
 /** Home page */
+#home-slider .et_pb_slide_description {
+    padding-left: 2%;
+}
+#home-slider .et_pb_slide_content p {
+    color: #ED1651;
+    font-family: 'canada-type-gibson', Helvetica, Arial, sans-serif;
+    font-size: 44pt;
+    line-height: 48pt;
+    max-width: 45%;
+    text-align: left;
+}
+
 .section-home-slider {
     padding: 2% 0 0 0;
 }
@@ -344,6 +356,10 @@ h1 {
 
     .home-services-title {
         text-align: center;
+    }
+
+    .not-on-mobile {
+        display: none;
     }
 }
 
